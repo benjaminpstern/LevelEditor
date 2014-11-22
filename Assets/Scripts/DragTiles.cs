@@ -32,7 +32,7 @@ public class DragTiles : MonoBehaviour {
 		if (Input.GetMouseButtonDown (2)) {
 			Destroy (gameObject);
 		}
-		if (Input.GetKeyDown(KeyCode.G)){
+		if (Input.GetKeyDown(script.Delete)){
 			Destroy (gameObject);
 		}
 	}

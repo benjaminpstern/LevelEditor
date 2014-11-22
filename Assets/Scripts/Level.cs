@@ -21,7 +21,11 @@ public class Level{
 	public List<Vector3> blowupMinePositions;
 	public List<Vector3> slowMinePositions;
 	public List<Vector3> invisijuicePositions;
-	
+	public List<List<Vector3>> slowEnemyPatrol;
+	public List<List<Vector3>> fastEnemyPatrol;
+	public List<List<Vector3>> rangedEnemyPatrol;
+	public List<List<Vector3>> pounceEnemyPatrol;
+	string [] objectList;
 	public Level(string fileName){
 		tiles = new List<List<int>>(); // if we need to add new rows we need to initialize a List<int> element and add to tiles
 		slowEnemyPositions = new List<Vector3>();
@@ -34,8 +38,13 @@ public class Level{
 		blowupMinePositions = new List<Vector3>();
 		slowMinePositions = new List<Vector3>();
 		invisijuicePositions= new List<Vector3>();
-		
-		
+		slowEnemyPatrol = new List<List<Vector3>>();
+		fastEnemyPatrol = new List<List<Vector3>>();
+		rangedEnemyPatrol = new List<List<Vector3>>();
+		pounceEnemyPatrol = new List<List<Vector3>>();
+		string [] objectList = {"SLOW ENEMY", "FAST ENEMY", "POUNCE ENEMY", "RANGED ENEMY", "TOWER", "DEAD ZONE",
+			"PUSH MINE", "BLOWUP MINE", "SLOW MINE", "INVISIJUICE"};
+		this.objectList = objectList;
 		/*for(int i=0;i<width;i++){
 			tiles.Add (new List<int>());
 			for (int j = 0; j < height; j++){
@@ -104,124 +113,11 @@ public class Level{
 			}
 		}
 		
-		for (int i = 0; i < lines.Count; i++){
-			if (string.Compare(lines[i], "SLOW ENEMY") == 0){
-				string BELine = lines[i+1];
-				string[] BELineSplit = BELine.Split (' ');
-				for (int j = 0; j < BELineSplit.Length; j++) {
-					string[] BE = BELineSplit[j].Split(',');
-					slowEnemyPositions.Add (new Vector3(float.Parse(BE[0]), float.Parse(BE[1]), 0));
-				}
-				break;
-			}
-		}
-		
-		for (int i = 0; i < lines.Count; i++){
-			if (string.Compare(lines[i], "FAST ENEMY") == 0){
-				string FELine = lines[i+1];
-				string[] FELineSplit = FELine.Split (' ');
-				for (int j = 0; j < FELineSplit.Length; j++) {
-					string[] FE = FELineSplit[j].Split(',');
-					fastEnemyPositions.Add (new Vector3(float.Parse(FE[0]), float.Parse(FE[1]), 0));
-				}
-				break;
-			}
-		}
-		
-		for (int i = 0; i < lines.Count; i++){
-			if (string.Compare(lines[i], "POUNCE ENEMY") == 0){
-				string PELine = lines[i+1];
-				string[] PELineSplit = PELine.Split (' ');
-				for (int j = 0; j < PELineSplit.Length; j++) {
-					string[] PE = PELineSplit[j].Split(',');
-					pounceEnemyPositions.Add(new Vector3(float.Parse(PE[0]), float.Parse(PE[1]), 0));
-				}
-				break;
-			}
-		}
-		
-		for (int i = 0; i < lines.Count; i++){
-			if (string.Compare(lines[i], "RANGED ENEMY") == 0){
-				string RELine = lines[i+1];
-				string[] RELineSplit = RELine.Split (' ');
-				for (int j = 0; j < RELineSplit.Length; j++) {
-					string[] RE = RELineSplit[j].Split(',');
-					rangedEnemyPositions.Add (new Vector3(float.Parse(RE[0]), float.Parse(RE[1]), 0));
-				}
-				break;
-			}
-		}
-		
-		for (int i = 0; i < lines.Count; i++){
-			if (string.Compare(lines[i], "TOWER") == 0){
-				string RELine = lines[i+1];
-				string[] RELineSplit = RELine.Split (' ');
-				for (int j = 0; j < RELineSplit.Length; j++) {
-					string[] RE = RELineSplit[j].Split(',');
-					towerPositions.Add(new Vector3(float.Parse(RE[0]), float.Parse(RE[1]), -1));
-				}
-				break;
-			}
-		}
-		
-		for (int i = 0; i < lines.Count; i++){
-			if (string.Compare(lines[i], "DEAD ZONE") == 0){
-				string RELine = lines[i+1];
-				string[] RELineSplit = RELine.Split (' ');
-				for (int j = 0; j < RELineSplit.Length; j++) {
-					string[] RE = RELineSplit[j].Split(',');
-					deadZonePositions.Add (new Vector3(float.Parse(RE[0]), float.Parse(RE[1]), 0));
-				}
-				break;
-			}
-		}
-		for (int i = 0; i < lines.Count; i++){
-			if (string.Compare(lines[i], "PUSH MINE") == 0){
-				string RELine = lines[i+1];
-				string[] RELineSplit = RELine.Split (' ');
-				for (int j = 0; j < RELineSplit.Length; j++) {
-					string[] RE = RELineSplit[j].Split(',');
-					pushMinePositions.Add (new Vector3(float.Parse(RE[0]), float.Parse(RE[1]), 0));
-				}
-				break;
-			}
-		}
-		for (int i = 0; i < lines.Count; i++){
-			if (string.Compare(lines[i], "BLOWUP MINE") == 0){
-				string RELine = lines[i+1];
-				string[] RELineSplit = RELine.Split (' ');
-				for (int j = 0; j < RELineSplit.Length; j++) {
-					string[] RE = RELineSplit[j].Split(',');
-					blowupMinePositions.Add (new Vector3(float.Parse(RE[0]), float.Parse(RE[1]), 0));
-				}
-				break;
-			}
-		}
-		for (int i = 0; i < lines.Count; i++){
-			if (string.Compare(lines[i], "SLOW MINE") == 0){
-				string RELine = lines[i+1];
-				string[] RELineSplit = RELine.Split (' ');
-				for (int j = 0; j < RELineSplit.Length; j++) {
-					string[] RE = RELineSplit[j].Split(',');
-					slowMinePositions.Add (new Vector3(float.Parse(RE[0]), float.Parse(RE[1]), 0));
-				}
-				break;
-			}
-		}
-		for (int i = 0; i < lines.Count; i++){
-			if (string.Compare(lines[i], "INVISIJUICE") == 0){
-				string RELine = lines[i+1];
-				string[] RELineSplit = RELine.Split (' ');
-				for (int j = 0; j < RELineSplit.Length; j++) {
-					string[] RE = RELineSplit[j].Split(',');
-					invisijuicePositions.Add (new Vector3(float.Parse(RE[0]), float.Parse(RE[1]), 0));
-				}
-				break;
-			}
+		for(int i=0;i<objectList.Length;i++){
+			readPositions(objectList[i],lines);
 		}
 		
 	}
-	
 	public void write(string fileName){
 		if (fileName == "") return;
 		
@@ -252,126 +148,151 @@ public class Level{
 		sw.WriteLine("EXIT");
 		string exitLine = exitPosition[0].ToString() + "," + exitPosition[1].ToString();
 		sw.WriteLine(exitLine);
-		
-		if (slowEnemyPositions.Count > 0){
-			sw.WriteLine("SLOW ENEMY");
-			string boringEnemyLine = "";
-			for (int i = 0; i < slowEnemyPositions.Count; i++){
-				boringEnemyLine += slowEnemyPositions[i][0].ToString() + "," + slowEnemyPositions[i][1].ToString();
-				if (i < slowEnemyPositions.Count - 1){
-					boringEnemyLine += " ";
-				}
-			}
-			sw.WriteLine(boringEnemyLine);
+		for(int i=0;i<objectList.Length;i++){
+			writePositions(objectList[i],sw);
 		}
-		
-		if (fastEnemyPositions.Count > 0){
-			sw.WriteLine("FAST ENEMY");
-			string fastEnemyLine = "";
-			for (int i = 0; i < fastEnemyPositions.Count; i++){
-				fastEnemyLine += fastEnemyPositions[i][0].ToString() + "," + fastEnemyPositions[i][1].ToString();
-				if (i < fastEnemyPositions.Count - 1){
-					fastEnemyLine += " ";
-				}
-			}
-			sw.WriteLine(fastEnemyLine);
-		}
-		
-		if (pounceEnemyPositions.Count > 0){
-			sw.WriteLine("POUNCE ENEMY");
-			string pounceEnemyLine = "";
-			for (int i = 0; i < pounceEnemyPositions.Count; i++){
-				pounceEnemyLine += pounceEnemyPositions[i][0].ToString() + "," + pounceEnemyPositions[i][1].ToString();
-				if (i < pounceEnemyPositions.Count - 1){
-					pounceEnemyLine += " ";
-				}
-			}
-			sw.WriteLine(pounceEnemyLine);
-		}
-		
-		if (rangedEnemyPositions.Count > 0){
-			sw.WriteLine("RANGED ENEMY");
-			string rangedEnemyLine = "";
-			for (int i = 0; i < rangedEnemyPositions.Count; i++){
-				rangedEnemyLine += rangedEnemyPositions[i][0].ToString() + "," + rangedEnemyPositions[i][1].ToString();
-				if (i < rangedEnemyPositions.Count - 1){
-					rangedEnemyLine += " ";
-				}
-			}
-			sw.WriteLine(rangedEnemyLine);
-		}
-		
-		if (towerPositions.Count > 0){
-			sw.WriteLine("TOWER");
-			string towerLine = "";
-			for (int i = 0; i < towerPositions.Count; i++){
-				towerLine += towerPositions[i][0].ToString() + "," + towerPositions[i][1].ToString();
-				if (i < towerPositions.Count - 1){
-					towerLine += " ";
-				}
-			}
-			sw.WriteLine(towerLine);
-		}
-		
-		if (deadZonePositions.Count > 0){
-			sw.WriteLine("DEAD ZONE");
-			string deadZoneLine = "";
-			for (int i = 0; i < deadZonePositions.Count; i++){
-				deadZoneLine += deadZonePositions[i][0].ToString() + "," + deadZonePositions[i][1].ToString();
-				if (i < deadZonePositions.Count - 1){
-					deadZoneLine += " ";
-				}
-			}
-			sw.WriteLine(deadZoneLine);
-		}
-		
-		if (pushMinePositions.Count > 0){
-			sw.WriteLine("PUSH MINE");
-			string pushMineLine = "";
-			for (int i = 0; i < pushMinePositions.Count; i++){
-				pushMineLine += pushMinePositions[i][0].ToString() + "," + pushMinePositions[i][1].ToString();
-				if (i < pushMinePositions.Count - 1){
-					pushMineLine += " ";
-				}
-			}
-			sw.WriteLine(pushMineLine);
-		}
-		if (blowupMinePositions.Count > 0){
-			sw.WriteLine("BLOWUP MINE");
-			string blowupMineLine = "";
-			for (int i = 0; i < blowupMinePositions.Count; i++){
-				blowupMineLine += blowupMinePositions[i][0].ToString() + "," + blowupMinePositions[i][1].ToString();
-				if (i < blowupMinePositions.Count - 1){
-					blowupMineLine += " ";
-				}
-			}
-			sw.WriteLine(blowupMineLine);
-		}
-		if (slowMinePositions.Count > 0){
-			sw.WriteLine("SLOW MINE");
-			string slowMineLine = "";
-			for (int i = 0; i < slowMinePositions.Count; i++){
-				slowMineLine += slowMinePositions[i][0].ToString() + "," + slowMinePositions[i][1].ToString();
-				if (i < slowMinePositions.Count - 1){
-					slowMineLine += " ";
-				}
-			}
-			sw.WriteLine(slowMineLine);
-		}
-		if (invisijuicePositions.Count > 0){
-			sw.WriteLine("INVISIJUICE");
-			string invisijuiceLine = "";
-			for (int i = 0; i < invisijuicePositions.Count; i++){
-				invisijuiceLine += invisijuicePositions[i][0].ToString() + "," + invisijuicePositions[i][1].ToString();
-				if (i < invisijuicePositions.Count - 1){
-					invisijuiceLine += " ";
-				}
-			}
-			sw.WriteLine(invisijuiceLine);
-		}
-		
-		
 		sw.Close();
+	}
+	public void readPositions(string objectName, List<string> lines){
+		List<Vector3> positions;
+		List<List<Vector3>> patrolPositions = null;
+		if(objectName == "SLOW ENEMY"){
+			positions = slowEnemyPositions;
+			patrolPositions = slowEnemyPatrol;
+		}
+		else if(objectName == "FAST ENEMY"){
+			positions = fastEnemyPositions;
+			patrolPositions = fastEnemyPatrol;
+		}
+		else if(objectName == "POUNCE ENEMY"){
+			positions = pounceEnemyPositions;
+			patrolPositions = pounceEnemyPatrol;
+		}
+		else if(objectName == "RANGED ENEMY"){
+			positions = rangedEnemyPositions;
+			patrolPositions = rangedEnemyPatrol;
+		}
+		else if(objectName == "TOWER"){
+			positions = towerPositions;
+		}
+		else if(objectName == "DEAD ZONE"){
+			positions = deadZonePositions;
+		}
+		else if(objectName == "PUSH MINE"){
+			positions = pushMinePositions;
+		}
+		else if(objectName == "SLOW MINE"){
+			positions = slowMinePositions;
+		}
+		else if(objectName == "BLOWUP MINE"){
+			positions = blowupMinePositions;
+		}
+		else if(objectName == "INVISIJUICE"){
+			positions = invisijuicePositions;
+		}
+		else{
+			positions = new List<Vector3>();
+		}
+		for (int i = 0; i < lines.Count; i++){
+			if (string.Compare(lines[i], objectName) == 0){
+				string BELine = lines[i+1];
+				string[] BELineSplit = BELine.Split (' ');
+				for (int j = 0; j < BELineSplit.Length; j++) {
+					string[] BE = BELineSplit[j].Split(',');
+					positions.Add (new Vector3(float.Parse(BE[0]), float.Parse(BE[1]), 0));
+					if(patrolPositions != null){
+						patrolPositions.Add (new List<Vector3>());
+					}
+				}
+				break;
+			}
+		}
+		if(patrolPositions != null){
+			for (int i = 0; i < lines.Count; i++){
+				if (string.Compare(lines[i], objectName + " PATROL") == 0){
+					string BELine = lines[i+1];
+					string[] BELineSplit = BELine.Split (' ');
+					for (int j = 0; j < BELineSplit.Length; j++) {
+						string[] lineSplit2 = BELineSplit[j].Split (';');
+						for(int k=0;k<lineSplit2.Length; k++){
+							string[] BE = lineSplit2[k].Split(',');
+							patrolPositions[j].Add (new Vector3(float.Parse(BE[0]), float.Parse(BE[1]), 0));
+						}
+					}
+					break;
+				}
+			}
+		}
+	}
+	public void writePositions(string objectName, StreamWriter sw){
+		List<Vector3> positions;
+		List<List<Vector3>> patrolPositions = null;
+		if(objectName == "SLOW ENEMY"){
+			positions = slowEnemyPositions;
+			patrolPositions = slowEnemyPatrol;
+		}
+		else if(objectName == "FAST ENEMY"){
+			positions = fastEnemyPositions;
+			patrolPositions = fastEnemyPatrol;
+		}
+		else if(objectName == "POUNCE ENEMY"){
+			positions = pounceEnemyPositions;
+			patrolPositions = pounceEnemyPatrol;
+		}
+		else if(objectName == "RANGED ENEMY"){
+			positions = rangedEnemyPositions;
+			patrolPositions = rangedEnemyPatrol;
+		}
+		else if(objectName == "TOWER"){
+			positions = towerPositions;
+		}
+		else if(objectName == "DEAD ZONE"){
+			positions = deadZonePositions;
+		}
+		else if(objectName == "PUSH MINE"){
+			positions = pushMinePositions;
+		}
+		else if(objectName == "SLOW MINE"){
+			positions = slowMinePositions;
+		}
+		else if(objectName == "BLOWUP MINE"){
+			positions = blowupMinePositions;
+		}
+		else if(objectName == "INVISIJUICE"){
+			positions = invisijuicePositions;
+		}
+		else{
+			positions = new List<Vector3>();
+		}
+		if (positions.Count > 0){
+			sw.WriteLine(objectName);
+			string positionsLine = "";
+			for (int i = 0; i < positions.Count; i++){
+				positionsLine += positions[i][0].ToString() + "," + positions[i][1].ToString();
+				if (i < positions.Count - 1){
+					positionsLine += " ";
+				}
+			}
+			sw.WriteLine(positionsLine);
+		}
+		if (patrolPositions != null){
+			if(patrolPositions.Count > 0){
+				sw.WriteLine(objectName + " PATROL");
+				string positionsLine = "";
+				for (int i = 0; i < patrolPositions.Count; i++){
+					if (i > 0 && i < patrolPositions.Count){
+						positionsLine += " ";
+					}
+					for(int j = 0; j< patrolPositions[i].Count; j++){
+						if(j>0 && j < patrolPositions[i].Count){
+							positionsLine += ";";
+						}
+						positionsLine += patrolPositions[i][j][0].ToString() + "," + patrolPositions[i][j][1].ToString();
+					}
+				}
+				sw.WriteLine(positionsLine);
+			}
+		}
 	}
 	public void setDimensions(int x, int y){
 		tiles = new List<List<int>>();
