@@ -216,6 +216,9 @@ public class Level{
 						string[] lineSplit2 = BELineSplit[j].Split (';');
 						for(int k=0;k<lineSplit2.Length; k++){
 							string[] BE = lineSplit2[k].Split(',');
+							if(BE[0]=="|"){
+								continue;
+							}
 							patrolPositions[j].Add (new Vector3(float.Parse(BE[0]), float.Parse(BE[1]), 0));
 						}
 					}
@@ -288,6 +291,9 @@ public class Level{
 							positionsLine += ";";
 						}
 						positionsLine += patrolPositions[i][j][0].ToString() + "," + patrolPositions[i][j][1].ToString();
+					}
+					if(patrolPositions[i].Count == 0){
+						positionsLine += "|";
 					}
 				}
 				sw.WriteLine(positionsLine);
