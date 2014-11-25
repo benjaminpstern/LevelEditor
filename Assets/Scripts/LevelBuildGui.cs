@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 public class LevelBuildGui : MonoBehaviour {
 	public GameObject player, slow_enemy, pounce_enemy, fast_enemy, vision_tower, 
-	ranged_enemy, exit, dead_zone, blowup_mine, push_mine, slow_mine, invisijuice, patrolPoint;
+	ranged_enemy, exit, dead_zone, blowup_mine, push_mine, slow_mine, invisijuice, patrolPoint, dynaSwitch;
 
 	public KeyCode Delete = KeyCode.H;
 	public bool play = false;
@@ -96,10 +96,12 @@ public class LevelBuildGui : MonoBehaviour {
 		level.slowMinePositions = new List<Vector3> ();
 		level.pushMinePositions = new List<Vector3> ();
 		level.invisijuicePositions = new List<Vector3> ();
+		level.dynaSwitchPositions = new List<Vector3> ();
 		level.slowEnemyPatrol = new List<List<Vector3>>();
 		level.fastEnemyPatrol = new List<List<Vector3>>();
 		level.rangedEnemyPatrol = new List<List<Vector3>>();
 		level.pounceEnemyPatrol = new List<List<Vector3>>();
+		level.dynaSwitchPoints = new List<List<Vector3>>();
 
 		GameObject[] enemies = GameObject.FindGameObjectsWithTag ("Enemy");
 		for (int i=0; i<enemies.Length; i++) {
@@ -128,6 +130,15 @@ public class LevelBuildGui : MonoBehaviour {
 		for (int i=0; i<invisijuices.Length; i++) {
 			level.invisijuicePositions.Add(invisijuices[i].transform.position);
 		}
+		GameObject[] dynaSwitches = GameObject.FindGameObjectsWithTag ("DynaSwitch");
+		for (int i=0; i<dynaSwitches.Length; i++) {
+			level.dynaSwitchPositions.Add(dynaSwitches[i].transform.position);
+			List<GameObject> pointObjects = dynaSwitches[i].GetComponent<Drag>().points;
+			level.dynaSwitchPoints.Add (new List<Vector3>());
+			for(int j=0;j<pointObjects.Count;j++){
+				level.dynaSwitchPoints[i].Add (pointObjects[j].transform.position);
+			}
+		}
 		Vector3 transformVector = new Vector3 (farthestLeft, farthestDown, 0);
 		level.playerPosition = level.playerPosition - transformVector;
 		level.exitPosition = level.exitPosition - transformVector;
@@ -142,6 +153,9 @@ public class LevelBuildGui : MonoBehaviour {
 		}
 		for (int i=0; i<level.pounceEnemyPositions.Count; i++) {
 			level.pounceEnemyPositions[i] = level.pounceEnemyPositions[i] - transformVector;
+		}
+		for (int i=0; i<level.dynaSwitchPositions.Count; i++) {
+			level.dynaSwitchPositions[i] = level.dynaSwitchPositions[i] - transformVector;
 		}
 		for (int i=0; i<level.slowEnemyPatrol.Count; i++) {
 			for(int j=0;j<level.slowEnemyPatrol[i].Count;j++){
@@ -161,6 +175,11 @@ public class LevelBuildGui : MonoBehaviour {
 		for (int i=0; i<level.pounceEnemyPatrol.Count; i++) {
 			for(int j=0;j<level.pounceEnemyPatrol[i].Count;j++){
 				level.pounceEnemyPatrol[i][j] = level.pounceEnemyPatrol[i][j] - transformVector;
+			}
+		}
+		for (int i=0; i<level.dynaSwitchPoints.Count; i++) {
+			for(int j=0;j<level.dynaSwitchPoints[i].Count;j++){
+				level.dynaSwitchPoints[i][j] = level.dynaSwitchPoints[i][j] - transformVector;
 			}
 		}
 		for (int i=0; i<level.towerPositions.Count; i++) {
@@ -291,6 +310,16 @@ public class LevelBuildGui : MonoBehaviour {
 				p.SetActive (false);
 			}
 		}
+		for(int i=0;i<level.dynaSwitchPositions.Count;i++){
+			o = Instantiate (dynaSwitch, level.dynaSwitchPositions[i], Quaternion.identity)as GameObject;
+			o.transform.name = "DynaSwitch";
+			for(int j=0;j<level.dynaSwitchPoints[i].Count;j++){
+				p = Instantiate(patrolPoint,level.dynaSwitchPoints[i][j],Quaternion.identity) as GameObject;
+				p.transform.name = "Blowup Point";
+				o.GetComponent<Drag>().points.Add(p);
+				p.SetActive (false);
+			}
+		}
 		for(int i=0;i<level.towerPositions.Count;i++){
 				o = Instantiate (vision_tower, level.towerPositions[i], Quaternion.identity)as GameObject;
 			o.transform.name = "Vision Tower";
@@ -368,6 +397,9 @@ public class LevelBuildGui : MonoBehaviour {
 			else if (select == "Dead Zone") {
 				oh = Instantiate (dead_zone, locale, Quaternion.identity)as GameObject;
 			}
+		else if (select == "DynaSwitch") {
+			oh = Instantiate (dynaSwitch, locale, Quaternion.identity)as GameObject;
+		}
 		else if (select == "Blowup Mine") {
 			oh = Instantiate (blowup_mine, locale, Quaternion.identity)as GameObject;
 		}
@@ -379,8 +411,8 @@ public class LevelBuildGui : MonoBehaviour {
 		}
 		else if (select == "Invisijuice") {
 			oh = Instantiate (invisijuice, locale, Quaternion.identity)as GameObject;
-		}else if (select == "Patrol Points") {
-			if(selectedObject.tag == "Enemy"){
+		}else if (select == "Patrol Points" || select == "Blowup Point") {
+			if(selectedObject.tag == "Enemy"||selectedObject.tag == "DynaSwitch"){
 				oh = Instantiate (patrolPoint, locale, Quaternion.identity)as GameObject;
 				oh.GetComponent<Point>().parent = selectedObject;
 				selectedObject.GetComponent<Drag>().points.Add (oh);
@@ -457,16 +489,22 @@ public class LevelBuildGui : MonoBehaviour {
 			select = "Dead Zone";
 		}
 		offset += Screen.height * 0.05f + 5;
-		if (GUI.Button (new Rect (10, Screen.height / 10 + offset, Screen.width / 4 - 20, Screen.height * 0.05f), "")) {
-			
+		if (GUI.Button (new Rect (10, Screen.height / 10 + offset, Screen.width / 4 - 20, Screen.height * 0.05f), "DynaSwitch")) {
+			select = "DynaSwitch";
 		}
 		offset += Screen.height * 0.05f + 5;
-		if (GUI.Button (new Rect (10, Screen.height / 10 + offset, Screen.width / 4 - 20, Screen.height * 0.05f), "")) {
-			
+		if (GUI.Button (new Rect (10, Screen.height / 10 + offset, Screen.width / 4 - 20, Screen.height * 0.05f), "Blowup Point")) {
+			select = "Blowup Point";
 		}
 		offset += Screen.height * 0.05f + 5;
-		if (GUI.Button (new Rect (10, Screen.height / 10 + offset, Screen.width / 4 - 20, Screen.height * 0.05f), "")) {
-			
+		if (GUI.Button (new Rect (10, Screen.height / 10 + offset, Screen.width / 4 - 20, Screen.height * 0.05f), "Clear Blowup Points")) {
+			if(selectedObject.tag == "DynaSwitch"){
+				Drag blowupSwitch = selectedObject.GetComponent<Drag>();
+				for(int i=0;i<blowupSwitch.points.Count;i++){
+					Destroy(blowupSwitch.points[i].gameObject);
+				}
+				blowupSwitch.points.Clear ();
+			}
 		}
 		offset += Screen.height * 0.05f + 5;
 		if (GUI.Button (new Rect (10, Screen.height / 10 + offset, Screen.width / 4 - 20, Screen.height * 0.05f), "")) {

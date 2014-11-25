@@ -21,10 +21,12 @@ public class Level{
 	public List<Vector3> blowupMinePositions;
 	public List<Vector3> slowMinePositions;
 	public List<Vector3> invisijuicePositions;
+	public List<Vector3> dynaSwitchPositions;
 	public List<List<Vector3>> slowEnemyPatrol;
 	public List<List<Vector3>> fastEnemyPatrol;
 	public List<List<Vector3>> rangedEnemyPatrol;
 	public List<List<Vector3>> pounceEnemyPatrol;
+	public List<List<Vector3>> dynaSwitchPoints;
 	string [] objectList;
 	public Level(string fileName){
 		tiles = new List<List<int>>(); // if we need to add new rows we need to initialize a List<int> element and add to tiles
@@ -38,12 +40,14 @@ public class Level{
 		blowupMinePositions = new List<Vector3>();
 		slowMinePositions = new List<Vector3>();
 		invisijuicePositions= new List<Vector3>();
+		dynaSwitchPositions = new List<Vector3>();
 		slowEnemyPatrol = new List<List<Vector3>>();
 		fastEnemyPatrol = new List<List<Vector3>>();
 		rangedEnemyPatrol = new List<List<Vector3>>();
 		pounceEnemyPatrol = new List<List<Vector3>>();
+		dynaSwitchPoints = new List<List<Vector3>>();
 		string [] objectList = {"SLOW ENEMY", "FAST ENEMY", "POUNCE ENEMY", "RANGED ENEMY", "TOWER", "DEAD ZONE",
-			"PUSH MINE", "BLOWUP MINE", "SLOW MINE", "INVISIJUICE"};
+			"PUSH MINE", "BLOWUP MINE", "SLOW MINE", "INVISIJUICE", "DYNASWITCH"};
 		this.objectList = objectList;
 		/*for(int i=0;i<width;i++){
 			tiles.Add (new List<int>());
@@ -175,6 +179,10 @@ public class Level{
 		else if(objectName == "TOWER"){
 			positions = towerPositions;
 		}
+		else if(objectName == "DYNASWITCH"){
+			positions = dynaSwitchPositions;
+			patrolPositions = dynaSwitchPoints;
+		}
 		else if(objectName == "DEAD ZONE"){
 			positions = deadZonePositions;
 		}
@@ -245,6 +253,10 @@ public class Level{
 		else if(objectName == "RANGED ENEMY"){
 			positions = rangedEnemyPositions;
 			patrolPositions = rangedEnemyPatrol;
+		}
+		else if(objectName == "DYNASWITCH"){
+			positions = dynaSwitchPositions;
+			patrolPositions = dynaSwitchPoints;
 		}
 		else if(objectName == "TOWER"){
 			positions = towerPositions;
