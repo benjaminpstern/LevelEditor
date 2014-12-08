@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 public class LevelBuildGui : MonoBehaviour {
 	public GameObject player, slow_enemy, pounce_enemy, fast_enemy, vision_tower, 
-	ranged_enemy, exit, dead_zone, blowup_mine, push_mine, slow_mine, invisijuice, patrolPoint, dynaSwitch;
+	ranged_enemy, exit, dead_zone, blowup_mine, push_mine, slow_mine, invisijuice,helmet, patrolPoint, dynaSwitch;
 
 	public KeyCode Delete = KeyCode.H;
 	public bool play = false;
@@ -96,6 +96,7 @@ public class LevelBuildGui : MonoBehaviour {
 		level.slowMinePositions = new List<Vector3> ();
 		level.pushMinePositions = new List<Vector3> ();
 		level.invisijuicePositions = new List<Vector3> ();
+		level.helmetPositions = new List<Vector3> ();
 		level.dynaSwitchPositions = new List<Vector3> ();
 		level.slowEnemyPatrol = new List<List<Vector3>>();
 		level.fastEnemyPatrol = new List<List<Vector3>>();
@@ -129,6 +130,10 @@ public class LevelBuildGui : MonoBehaviour {
 		GameObject[] invisijuices = GameObject.FindGameObjectsWithTag ("Invisijuice");
 		for (int i=0; i<invisijuices.Length; i++) {
 			level.invisijuicePositions.Add(invisijuices[i].transform.position);
+		}
+		GameObject[] helmets = GameObject.FindGameObjectsWithTag ("Helmet");
+		for (int i=0; i<helmets.Length; i++) {
+			level.helmetPositions.Add(helmets[i].transform.position);
 		}
 		GameObject[] dynaSwitches = GameObject.FindGameObjectsWithTag ("DynaSwitch");
 		for (int i=0; i<dynaSwitches.Length; i++) {
@@ -200,7 +205,9 @@ public class LevelBuildGui : MonoBehaviour {
 		for (int i=0; i<level.invisijuicePositions.Count; i++) {
 			level.invisijuicePositions[i] = level.invisijuicePositions[i] - transformVector;
 		}
-		
+		for (int i=0; i<level.helmetPositions.Count; i++) {
+			level.helmetPositions[i] = level.helmetPositions[i] - transformVector;
+		}
 		level.write (outputFile);
 	}
 	public void slowPosition(Vector3 pos){
@@ -344,6 +351,10 @@ public class LevelBuildGui : MonoBehaviour {
 			o = Instantiate (invisijuice, level.invisijuicePositions[i], Quaternion.identity)as GameObject;
 			o.transform.name = "Invisijuice";
 		}
+		for(int i=0;i<level.helmetPositions.Count;i++){
+			o = Instantiate (helmet, level.helmetPositions[i], Quaternion.identity)as GameObject;
+			o.transform.name = "Helmet";
+		}
 	}
 	void OnGUI(){
 		GUI.Box (new Rect (Screen.width*0.70f, 0, Screen.width/4, Screen.height/25), "SELECTION: "+select);
@@ -411,6 +422,9 @@ public class LevelBuildGui : MonoBehaviour {
 		}
 		else if (select == "Invisijuice") {
 			oh = Instantiate (invisijuice, locale, Quaternion.identity)as GameObject;
+		}
+		else if (select == "Helmet") {
+			oh = Instantiate (helmet, locale, Quaternion.identity)as GameObject;
 		}else if (select == "Patrol Points" || select == "Blowup Point") {
 			if(selectedObject.tag == "Enemy"||selectedObject.tag == "DynaSwitch"){
 				oh = Instantiate (patrolPoint, locale, Quaternion.identity)as GameObject;
@@ -423,7 +437,12 @@ public class LevelBuildGui : MonoBehaviour {
 		} else {
 			oh = Instantiate (wallTile, locale, Quaternion.identity)as GameObject;
 		}
-		oh.transform.name = select;	
+		if(select != "none"){
+			oh.transform.name = select;	
+		}
+		else{
+			oh.transform.name = "Wall";
+		}
 			
 		}
 		void playmode(){
@@ -643,8 +662,8 @@ public class LevelBuildGui : MonoBehaviour {
 			select = "Invisijuice";
 		}
 		offset += Screen.height * 0.05f + 5;
-		if (GUI.Button (new Rect (10, Screen.height / 10 + offset, Screen.width / 4 - 20, Screen.height * 0.05f), "")) {
-			
+		if (GUI.Button (new Rect (10, Screen.height / 10 + offset, Screen.width / 4 - 20, Screen.height * 0.05f), "Helmet")) {
+			select = "Helmet";
 		}
 		offset += Screen.height * 0.05f + 5;
 		if (GUI.Button (new Rect (10, Screen.height / 10 + offset, Screen.width / 4 - 20, Screen.height * 0.05f), "")) {

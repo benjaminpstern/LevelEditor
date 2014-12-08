@@ -20,6 +20,7 @@ public class Level{
 	public List<Vector3> pushMinePositions;
 	public List<Vector3> blowupMinePositions;
 	public List<Vector3> slowMinePositions;
+	public List<Vector3> helmetPositions;
 	public List<Vector3> invisijuicePositions;
 	public List<Vector3> dynaSwitchPositions;
 	public List<List<Vector3>> slowEnemyPatrol;
@@ -41,13 +42,14 @@ public class Level{
 		slowMinePositions = new List<Vector3>();
 		invisijuicePositions= new List<Vector3>();
 		dynaSwitchPositions = new List<Vector3>();
+		helmetPositions = new List<Vector3>();
 		slowEnemyPatrol = new List<List<Vector3>>();
 		fastEnemyPatrol = new List<List<Vector3>>();
 		rangedEnemyPatrol = new List<List<Vector3>>();
 		pounceEnemyPatrol = new List<List<Vector3>>();
 		dynaSwitchPoints = new List<List<Vector3>>();
 		string [] objectList = {"SLOW ENEMY", "FAST ENEMY", "POUNCE ENEMY", "RANGED ENEMY", "TOWER", "DEAD ZONE",
-			"PUSH MINE", "BLOWUP MINE", "SLOW MINE", "INVISIJUICE", "DYNASWITCH"};
+			"PUSH MINE", "BLOWUP MINE", "SLOW MINE", "INVISIJUICE", "DYNASWITCH","HELMET"};
 		this.objectList = objectList;
 		/*for(int i=0;i<width;i++){
 			tiles.Add (new List<int>());
@@ -198,6 +200,9 @@ public class Level{
 		else if(objectName == "INVISIJUICE"){
 			positions = invisijuicePositions;
 		}
+		else if(objectName == "HELMET"){
+			positions = helmetPositions;
+		}
 		else{
 			positions = new List<Vector3>();
 		}
@@ -272,6 +277,9 @@ public class Level{
 		}
 		else if(objectName == "BLOWUP MINE"){
 			positions = blowupMinePositions;
+		}
+		else if(objectName == "HELMET"){
+			positions = helmetPositions;
 		}
 		else if(objectName == "INVISIJUICE"){
 			positions = invisijuicePositions;
